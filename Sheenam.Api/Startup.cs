@@ -29,7 +29,7 @@ namespace Sheenam.Api
             };
 
             services.AddControllers();
-            services.AddDbContext<StorageBroker>();
+            AddBrokers(services);
 
             services.AddSwaggerGen(options =>
             {
@@ -37,6 +37,12 @@ namespace Sheenam.Api
                     name: "v1",
                     info: apiInfo);
             });
+        }
+
+        private static void AddBrokers(IServiceCollection services)
+        {
+            services.AddDbContext<StorageBroker>();
+            services.AddTransient<IStorageBroker, StorageBroker>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
