@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sheenam.Api.Brokers.Storages;
 
@@ -11,9 +12,11 @@ using Sheenam.Api.Brokers.Storages;
 namespace Sheenam.Api.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    partial class StorageBrokerModelSnapshot : ModelSnapshot
+    [Migration("20230217034101_AddHomesTable")]
+    partial class AddHomesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,10 +84,10 @@ namespace Sheenam.Api.Migrations
                     b.Property<bool>("IsVacant")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NumberOfBathrooms")
+                    b.Property<int>("NumOfBathrooms")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfBedrooms")
+                    b.Property<int>("NumOfBedrooms")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
