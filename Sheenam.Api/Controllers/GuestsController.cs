@@ -36,14 +36,14 @@ namespace Sheenam.Api.Controllers
             {
                 return BadRequest(guestValidationException.InnerException);
             }
-            catch (GuestDependencyValidationException guestDependencyValidationException)
-                when (guestDependencyValidationException.InnerException is AlreadyExistGuestException)
+            catch (GuestDependencyValidationException guestDependenceValidationException)
+                when (guestDependenceValidationException.InnerException is AlreadyExistGuestException)
             {
-                return Conflict(guestDependencyValidationException.InnerException);
+                return Conflict(guestDependenceValidationException.InnerException);
             }
-            catch (GuestDependencyValidationException guestDependencyValidationException)
+            catch (GuestDependencyValidationException guestDependenceValidationException)
             {
-                return BadRequest(guestDependencyValidationException.InnerException);
+                return BadRequest(guestDependenceValidationException.InnerException);
             }
             catch (GuestDependencyException guestDependenceException)
             {
