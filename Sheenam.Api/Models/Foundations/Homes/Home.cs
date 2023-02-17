@@ -16,8 +16,8 @@ namespace Sheenam.Api.Models.Foundations.Homes
         public bool IsVacant { get; set; }
         public bool IsPetAllowed { get; set; }
         public bool IsShared { get; set; }
-        public int NumOfBedrooms { get; set; }
-        public int NumOfBathrooms { get; set; }
+        public int NumberOfBedrooms { get; set; }
+        public int NumberOfBathrooms { get; set; }
         public double Area { get; set; }
         public decimal Price { get; set; }
         public HouseType Type { get; set; }
