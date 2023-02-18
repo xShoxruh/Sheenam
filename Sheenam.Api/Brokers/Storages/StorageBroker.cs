@@ -3,6 +3,7 @@
 // Free To Use To Find Comfort and Peace
 //==================================================
 
+using System.Linq;
 using System.Threading.Tasks;
 using EFxceptions;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ namespace Sheenam.Api.Brokers.Storages
 
             return @object;
         }
+
+        private IQueryable<T> SelectAll<T>() where T : class => this.Set<T>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
