@@ -3,6 +3,7 @@
 // Free To Use To Find Comfort and Peace
 //==================================================
 
+using System.Linq;
 using System.Threading.Tasks;
 using Sheenam.Api.Brokers.Storages;
 using Sheenam.Api.Brokers.Storages.Loggings;
@@ -30,5 +31,12 @@ namespace Sheenam.Api.Services.Foundations.Guests
 
             return await this.storageBroker.InsertGuestAsync(guest);
         });
+
+        public IQueryable<Guest> RetrieveAllGuests() =>
+        TryCatch(() =>
+        {
+            return this.storageBroker.SelectAllGuests();
+        });
+
     }
 }
