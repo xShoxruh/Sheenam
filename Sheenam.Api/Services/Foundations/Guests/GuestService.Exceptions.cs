@@ -64,13 +64,15 @@ namespace Sheenam.Api.Services.Foundations.Guests
             }
             catch (SqlException sqlException)
             {
-                var failedGuestServiceException = new FailedGuestServiceException(sqlException);
+                var failedGuestServiceException = 
+                    new FailedGuestServiceException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedGuestServiceException);
             }
             catch (Exception serviException)
             {
-                var failedServiceGuestException = new FailedGuestServiceException(serviException);
+                var failedServiceGuestException = 
+                    new FailedGuestServiceException(serviException);
 
                 throw CreateAndLogServiceException(failedServiceGuestException);
             }
@@ -82,15 +84,15 @@ namespace Sheenam.Api.Services.Foundations.Guests
                    new GuestValidationException(exception);
 
             this.loggingBroker.LogError(guestValidationException);
-
             return guestValidationException;
         }
 
         private GuestDependencyException CreateAndLogCriticalDependencyException(Xeption exception)
         {
-            var guestDependencyException = new GuestDependencyException(exception);
-            this.loggingBroker.LogCritical(guestDependencyException);
+            var guestDependencyException = 
+                new GuestDependencyException(exception);
 
+            this.loggingBroker.LogCritical(guestDependencyException);
             return guestDependencyException;
         }
 
@@ -101,15 +103,15 @@ namespace Sheenam.Api.Services.Foundations.Guests
                 new GuestDependencyValidationException(exception);
 
             this.loggingBroker.LogError(guestDependencyValidationException);
-
             return guestDependencyValidationException;
         }
 
         private GuestServiceException CreateAndLogServiceException(Xeption exception)
         {
-            var guestServiceException = new GuestServiceException(exception);
-            this.loggingBroker.LogError(guestServiceException);
+            var guestServiceException = 
+                new GuestServiceException(exception);
 
+            this.loggingBroker.LogError(guestServiceException);
             return guestServiceException;
         }
     }

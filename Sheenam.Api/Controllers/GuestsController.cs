@@ -9,6 +9,8 @@ using RESTFulSense.Controllers;
 using Sheenam.Api.Models.Foundations.Guests.Exceptions;
 using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
+using System.Linq;
+using System.Net.Sockets;
 
 namespace Sheenam.Api.Controllers
 {
@@ -17,7 +19,6 @@ namespace Sheenam.Api.Controllers
     public class GuestsController : RESTFulController
     {
         private readonly IGuestService guestService;
-
         public GuestsController(IGuestService guestService)
         {
             this.guestService = guestService;
@@ -48,6 +49,25 @@ namespace Sheenam.Api.Controllers
             catch (GuestDependencyException guestDependenceException)
             {
                 return InternalServerError(guestDependenceException.InnerException);
+            }
+            catch (GuestServiceException guestServiceException)
+            {
+                return InternalServerError(guestServiceException.InnerException);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult<IQueryable<Guest>> GetAllGuests()
+        {
+            try
+            {
+                IQueryable<Guest> allGuests = this.guestService.RetrieveAllGuests();
+
+                return Ok(allGuests);
+            }
+            catch (GuestDependencyException guestDependencyException)
+            {
+                return InternalServerError(guestDependencyException.InnerException);
             }
             catch (GuestServiceException guestServiceException)
             {
