@@ -68,7 +68,6 @@ namespace Sheenam.Api.Services.Foundations.Guests
 
                 throw CreateAndLogCriticalDependencyException(failedGuestServiceException);
             }
-
         }
 
         private GuestValidationException CreateAndLogValidationException(Xeption exception)
