@@ -13,6 +13,7 @@ using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
 using Tynamix.ObjectFiller;
 using Xeptions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -34,6 +35,10 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
 
         private static Guest CreateRandomGuest() =>
              CreateGuestFiller(date: GetRandomDateTimeOffset()).Create();
+
+        private static IQueryable<Guest> CreateRandomGuests() =>
+            CreateGuestFiller(date: GetRandomDateTimeOffset())
+                .Create(count: GetRandomNumber()).AsQueryable();
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
