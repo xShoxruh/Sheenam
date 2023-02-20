@@ -3,6 +3,7 @@
 // Free To Use To Find Comfort and Peace
 //==================================================
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Sheenam.Api.Brokers.Storages;
@@ -38,5 +39,17 @@ namespace Sheenam.Api.Services.Foundations.Guests
             return this.storageBroker.SelectAllGuests();
         });
 
+        public async ValueTask<Guest> RetrieveGuestByIdAsync(Guid guestId) =>
+        await TryCatch(async () =>
+        {
+            ValidateGuestId(guestId);
+
+            Guest maybeGuest =
+                await storageBroker.SelectGuestByIdAsync(guestId);
+
+            ValidateStorageGuest(maybeGuest, guestId);
+
+            return maybeGuest;
+        });
     }
 }
