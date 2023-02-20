@@ -13,7 +13,7 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
     public partial class GuestServiceTests
     {
         [Fact]
-        public async Task ShouldThrowExceptionOnRetrieveByIdIfSqlErrorOccurred()
+        public async Task ShouldThrowExceptionOnRetrieveByIdIfSqlErrorOccurredAndLogItAsync()
         {
             // given
             Guid randomId = Guid.NewGuid();
@@ -26,21 +26,22 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
                 new GuestDependencyException(failedGuestStorageException);
 
             this.storageBrokerMock.Setup(broker =>
-                broker.SelectGuestByIdAsync(randomId)).ThrowsAsync(sqlException);
+                broker.SelectGuestByIdAsync(It.IsAny<Guid>())).ThrowsAsync(sqlException);
 
             // when
-            ValueTask<Guest> RetrieveByIdTask =
+            ValueTask<Guest> RetrieveGuestByIdTask =
                 this.guestService.RetrieveGuestByIdAsync(randomId);
 
             // then
             await Assert.ThrowsAsync<GuestDependencyException>(() =>
-                RetrieveByIdTask.AsTask());
+                RetrieveGuestByIdTask.AsTask());
 
             this.storageBrokerMock.Verify(broker =>
                 broker.SelectGuestByIdAsync(It.IsAny<Guid>()), Times.Once());
 
             this.loggingBrokerMock.Verify(broker =>
-            broker.LogCritical(guestDependencyException), Times.Once());
+                broker.LogCritical(It.Is(SameExceptionAs(guestDependencyException))),
+                    Times.Once());
 
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
