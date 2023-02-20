@@ -11,6 +11,7 @@ using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
 using System.Linq;
 using System.Net.Sockets;
+using System;
 
 namespace Sheenam.Api.Controllers
 {
@@ -68,6 +69,34 @@ namespace Sheenam.Api.Controllers
             catch (GuestDependencyException guestDependencyException)
             {
                 return InternalServerError(guestDependencyException.InnerException);
+            }
+            catch (GuestServiceException guestServiceException)
+            {
+                return InternalServerError(guestServiceException.InnerException);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async ValueTask<ActionResult<Guest>> GetGuestByIdAsync(Guid id)
+        {
+            try
+            {
+                Guest currentGuest = await this.guestService.RetrieveGuestByIdAsync(id);
+                return Ok(currentGuest);
+            }
+            catch (GuestDependencyException guestDependencyException)
+            {
+                return InternalServerError(guestDependencyException.InnerException);
+            }
+            catch (GuestValidationException guestValidationException)
+                when (guestValidationException.InnerException is InvalidGuestException)
+            {
+                return BadRequest(guestValidationException.InnerException);
+            }
+            catch (GuestValidationException guestValidationException)
+                when (guestValidationException.InnerException is NotFoundGuestException)
+            {
+                return NotFound(guestValidationException.InnerException);
             }
             catch (GuestServiceException guestServiceException)
             {

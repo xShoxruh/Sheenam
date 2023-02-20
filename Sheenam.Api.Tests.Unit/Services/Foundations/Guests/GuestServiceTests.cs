@@ -13,7 +13,6 @@ using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
 using Tynamix.ObjectFiller;
 using Xeptions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
 {
