@@ -33,11 +33,27 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
         }
 
         private static Guest CreateRandomGuest() =>
-             CreateGuestFiller(date: GetRandomDateTimeOffset()).Create();
+             CreateGuestFiller(dates: GetRandomDateTimeOffset()).Create();
 
         private static IQueryable<Guest> CreateRandomGuests() =>
-            CreateGuestFiller(date: GetRandomDateTimeOffset())
+            CreateGuestFiller(dates: GetRandomDateTimeOffset())
                 .Create(count: GetRandomNumber()).AsQueryable();
+
+        private static Guest CreateRandomGuest(DateTimeOffset dates) =>
+            CreateGuestFiller(dates).Create();
+        private static int GetRandomNegativeNumber() =>
+           -1 * new IntRange(min: 2, max: 10).GetValue();
+
+        private static Guest CreateRandomModifyGuest(DateTimeOffset dates)
+        {
+            int randomDaysInPast = GetRandomNegativeNumber();
+            Guest randomGuest = CreateRandomGuest(dates);
+
+            randomGuest.CreatedDate = 
+                randomGuest.CreatedDate.AddDays(randomDaysInPast);
+
+            return randomGuest;
+        }
 
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate: new DateTime()).GetValue();
@@ -69,12 +85,12 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
         private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
             actualException => actualException.SameExceptionAs(expectedException);
 
-        private static Filler<Guest> CreateGuestFiller(DateTimeOffset date)
+        private static Filler<Guest> CreateGuestFiller(DateTimeOffset dates)
         {
             var filler = new Filler<Guest>();
 
             filler.Setup()
-                .OnType<DateTimeOffset>().Use(date);
+                .OnType<DateTimeOffset>().Use(dates);
 
             return filler;
         }
