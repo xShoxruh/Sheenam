@@ -13,6 +13,8 @@ namespace Sheenam.Api.Models.Foundations.Guests
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTimeOffset DateOfBirth { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset UpdatedDate { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
