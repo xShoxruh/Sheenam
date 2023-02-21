@@ -18,8 +18,7 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
             DateTimeOffset randomDate = GetRandomDateTimeOffset();
             Guest randomGuest = CreateRandomModifyGuest(randomDate);
             Guest inputGuest = randomGuest;
-            Guest storageGuest = inputGuest.DeepClone();
-            storageGuest.UpdatedDate = randomGuest.CreatedDate;
+            Guest storageGuest = inputGuest;
             Guest updatedGuest = inputGuest;
             Guest expectedGuest = updatedGuest.DeepClone();
             Guid guestId = inputGuest.Id;
