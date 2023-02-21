@@ -4,8 +4,6 @@
 //==================================================
 
 using System;
-using System.Data;
-using System.Reflection.Metadata;
 using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Models.Foundations.Guests.Exceptions;
 
@@ -88,23 +86,6 @@ namespace Sheenam.Api.Services.Foundations.Guests
             Condition = Enum.IsDefined(gender) is false,
             Message = "Value is invalid"
         };
-
-        private dynamic IsNotRecent(DateTimeOffset date) => new
-        {
-            Condition = IsDateNotRecent(date),
-            Message = "Date is not recent"
-        };
-
-        private bool IsDateNotRecent(DateTimeOffset date)
-		{
-			DateTimeOffset currentDateTime =
-			    DateTimeOffset.Now;
-
-			TimeSpan timeDifference = currentDateTime.Subtract(date);
-			TimeSpan oneMinute = TimeSpan.FromMinutes(1);
-
-			return timeDifference.Duration() > oneMinute;
-		}
 
         private static dynamic IsSame(
            DateTimeOffset firstDate,
