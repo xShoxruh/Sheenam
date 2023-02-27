@@ -10,7 +10,6 @@ using Sheenam.Api.Models.Foundations.Guests.Exceptions;
 using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
 using System.Linq;
-using System.Net.Sockets;
 using System;
 
 namespace Sheenam.Api.Controllers
@@ -101,6 +100,36 @@ namespace Sheenam.Api.Controllers
             catch (GuestServiceException guestServiceException)
             {
                 return InternalServerError(guestServiceException.InnerException);
+            }
+        }
+
+        [HttpPut("update")]
+        public async ValueTask<ActionResult<Guest>> PutGuestAsync([FromBody] Guest guest)
+        {
+            try
+            {
+                Guest updatedGuest =
+                    await this.guestService.ModifyGuestAsync(guest);
+
+                return Ok(updatedGuest);
+            }
+            catch (GuestValidationException guestValidationException)
+            {
+                return BadRequest(guestValidationException.InnerException);
+            }
+            catch (GuestDependencyValidationException guestDependencyValidationException)
+                when (guestDependencyValidationException.InnerException is AlreadyExistGuestException)
+
+            {
+                return Conflict(guestDependencyValidationException.InnerException);
+            }
+            catch (GuestDependencyValidationException guestDependencyValidationException)
+            {
+                return BadRequest(guestDependencyValidationException.InnerException);
+            }
+            catch (GuestDependencyException guestDependencyException)
+            {
+                return InternalServerError(guestDependencyException.InnerException);
             }
         }
     }
