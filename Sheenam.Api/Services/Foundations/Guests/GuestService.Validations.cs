@@ -4,8 +4,6 @@
 //==================================================
 
 using System;
-using System.Data;
-using System.Reflection.Metadata;
 using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Models.Foundations.Guests.Exceptions;
 
@@ -15,7 +13,7 @@ namespace Sheenam.Api.Services.Foundations.Guests
     {
         private void ValidateGuestOnAdd(Guest guest)
         {
-            ValidateGuestNotNull(guest);
+            ValidationGuestNotNull(guest);
 
             Validate(
                 (Rule: IsInvalid(guest.Id), Parameter: nameof(Guest.Id)),
@@ -25,6 +23,25 @@ namespace Sheenam.Api.Services.Foundations.Guests
                 (Rule: IsInvalid(guest.Email), Parameter: nameof(Guest.Email)),
                 (Rule: IsInvalid(guest.Address), Parameter: nameof(Guest.Address)),
                 (Rule: IsInvalid(guest.Gender), Parameter: nameof(Guest.Gender)));
+        }
+
+        private void ValidateGuestOnModify(Guest guest)
+        {
+            ValidationGuestNotNull(guest);
+
+            Validate(
+              (Rule: IsInvalid(guest.Id), Parameter: nameof(guest.Id)),
+              (Rule: IsInvalid(guest.FirstName), Parameter: nameof(guest.FirstName)),
+              (Rule: IsInvalid(guest.LastName), Parameter: nameof(guest.LastName)),
+              (Rule: IsInvalid(guest.DateOfBirth), Parameter: nameof(guest.DateOfBirth)),
+              (Rule: IsInvalid(guest.Email), Parameter: nameof(guest.Email)),
+              (Rule: IsInvalid(guest.Address), Parameter: nameof(guest.Address)),
+              (Rule: IsInvalid(guest.Gender), Parameter: nameof(guest.Gender)),
+              (Rule: IsSame(
+                    firstDate: guest.UpdatedDate,
+                    secondDate: guest.CreatedDate,
+                    secondDateName: nameof(Guest.CreatedDate)),
+                Parameter: nameof(Guest.UpdatedDate)));
         }
 
         private void ValidateGuestId(Guid guestId) =>
@@ -38,7 +55,7 @@ namespace Sheenam.Api.Services.Foundations.Guests
             }
         }
 
-        private void ValidateGuestNotNull(Guest guest)
+        private void ValidationGuestNotNull(Guest guest)
         {
             if (guest is null)
             {
@@ -69,6 +86,15 @@ namespace Sheenam.Api.Services.Foundations.Guests
             Condition = Enum.IsDefined(gender) is false,
             Message = "Value is invalid"
         };
+
+        private static dynamic IsSame(
+           DateTimeOffset firstDate,
+           DateTimeOffset secondDate,
+           string secondDateName) => new
+           {
+               Condition = firstDate == secondDate,
+               Message = $"Date is the same as {secondDateName}"
+           };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
         {
