@@ -49,7 +49,7 @@ namespace Sheenam.Api.Services.Foundations.Guests
         public async ValueTask<Guest> RemoveGuestByIdAsync(Guid guestId) =>
         await TryCatch(async () =>
         {
-            ValidateGuestId(guestId);
+            /*ValidateGuestId(guestId);*/
 
             Guest maybeGuest = await this.storageBroker
                 .SelectGuestByIdAsync(guestId);
