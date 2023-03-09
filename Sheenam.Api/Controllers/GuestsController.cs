@@ -11,6 +11,7 @@ using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
 using System.Linq;
 using System;
+using System.Net.Sockets;
 
 namespace Sheenam.Api.Controllers
 {
@@ -130,6 +131,39 @@ namespace Sheenam.Api.Controllers
             catch (GuestDependencyException guestDependencyException)
             {
                 return InternalServerError(guestDependencyException.InnerException);
+            }
+        }
+
+        [HttpDelete("{guestId}")]
+        public async ValueTask<ActionResult<Guest>> DeleteGuestByIdAsync(Guid guestId)
+        {
+            try
+            {
+                Guest deletedGuest =
+                    await this.guestService.RemoveGuestByIdAsync(guestId);
+
+                return Ok(deletedGuest);
+            }
+            catch (GuestValidationException GuestValidationException)
+                when (GuestValidationException.InnerException is NotFoundGuestException)
+            {
+                return NotFound(GuestValidationException.InnerException);
+            }
+            catch (GuestValidationException GuestValidationException)
+            {
+                return BadRequest(GuestValidationException.InnerException);
+            }
+            catch (GuestDependencyValidationException GuestDependencyValidationException)
+            {
+                return BadRequest(GuestDependencyValidationException.InnerException);
+            }
+            catch (GuestDependencyException GuestDependencyException)
+            {
+                return InternalServerError(GuestDependencyException);
+            }
+            catch (GuestServiceException GuestServiceException)
+            {
+                return InternalServerError(GuestServiceException);
             }
         }
     }
