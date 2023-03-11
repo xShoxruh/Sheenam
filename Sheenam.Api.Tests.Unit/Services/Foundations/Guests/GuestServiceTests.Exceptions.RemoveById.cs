@@ -69,15 +69,15 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
                     .ThrowsAsync(serviceException);
 
             // when
-            ValueTask<Guest> removeTicketByIdTask =
+            ValueTask<Guest> removeGuestByIdTask =
                 this.guestService.RemoveGuestByIdAsync(someGuestId);
 
-            GuestServiceException actualTicketServiceException =
+            GuestServiceException actualGuestServiceException =
                 await Assert.ThrowsAsync<GuestServiceException>(
-                    removeTicketByIdTask.AsTask);
+                    removeGuestByIdTask.AsTask);
 
             // then
-            actualTicketServiceException.Should().BeEquivalentTo(
+            actualGuestServiceException.Should().BeEquivalentTo(
                 expectedGuestServiceException);
 
             this.storageBrokerMock.Verify(broker =>
